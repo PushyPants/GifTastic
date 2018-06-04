@@ -4,6 +4,7 @@ $(document).ready(function(){
     let trendRelated;
     let topics = ['cat','dog','puppy','monkey','bear','raccoon'];
     let buttonQuery;
+    let searchResults;
 
 
     function getTrending() {
@@ -77,6 +78,24 @@ $(document).ready(function(){
 
     createButtons();
 
+    function btnSearch() {
+        $('.searchTerms').on('click','.btnSearch', function(){
+            let searchTerm = $(this).val();
+
+            $.ajax({
+                url: 'http://api.giphy.com/v1/gifs/search?api_key='+apiKey+'&limit=10&q='+searchTerm,
+                method: 'GET',
+            }).then(function(searchObject){
+                searchResults = searchObject.data;
+                
+                $(searchResults).each(function(i){
+                    console.log(searchResults[i].title)
+                });
+            });
+        });
+    }
+
+    btnSearch();
 
         //create buttons from array in the DOM
             //user clicks button and gets 10 static results from giphy from that word
