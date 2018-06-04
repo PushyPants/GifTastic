@@ -60,3 +60,14 @@ function getTrending() {
     })
 }
 getTrending();
+
+//create and array of words (let topics)
+    //create buttons from array in the DOM
+        //user clicks button and gets 10 static results from giphy from that word
+            //under each gif it should display the rating
+        
+//when user clicks on the giphy image the gif starts to play
+    //clicks again and the gif stops playing
+
+
+//search form takes a value from the input and returns the same result as the button. 
