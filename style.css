@@ -1,0 +1,32 @@
+.jumbotron {
+    padding-top:15px;
+    padding-bottom: 15px;
+}
+  
+  .jumbotron p:last-child {
+    margin-bottom: 0;
+  }
+  
+  .jumbotron-heading {
+    font-weight: 300;
+  }
+  
+  
+  footer {
+    padding-top: 3rem;
+    padding-bottom: 3rem;
+  }
+  
+  footer p {
+    margin-bottom: .25rem;
+  }
+  
+  .box-shadow { box-shadow: 0 .25rem .75rem rgba(0, 0, 0, .05); }
+
+  .navbar-toggler {
+      margin-left:10px;
+  }
+
+  /* .w-100 {
+      width: auto !important;
+  } */
