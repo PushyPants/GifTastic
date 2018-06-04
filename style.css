@@ -1,6 +1,7 @@
 .jumbotron {
     padding-top:15px;
     padding-bottom: 15px;
+    margin-bottom: 0;
 }
   
   .jumbotron p:last-child {
@@ -27,6 +28,3 @@
       margin-left:10px;
   }
 
-  /* .w-100 {
-      width: auto !important;
-  } */
