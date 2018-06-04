@@ -120,13 +120,17 @@ $(document).ready(function(){
 
     btnSearch();
 
-        //create buttons from array in the DOM
-            //user clicks button and gets 10 static results from giphy from that word
-                //under each gif it should display the rating
             
     //when user clicks on the giphy image the gif starts to play
         //clicks again and the gif stops playing
+    function formSubmit(){
+        $('#searchBar').submit(function(event){
+            event.preventDefault();
+            console.log($(searchInput).val());
+        });
+    };
 
+    formSubmit();
 
     //search form takes a value from the input and returns the same result as the button. 
 
