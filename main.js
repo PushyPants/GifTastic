@@ -91,11 +91,12 @@ $(document).ready(function(){
                 $(searchResults).each(function(i){
                     let still = this.images.original_still.url;
                     let animated = this.images.original.url;
-                    console.log(this);
+                    
+                    
                     $('#searchResults').append(`
-                    <div class="col-md-4">
+                    <div id="resultBtn-${i}" class="col-md-4 resultItem">
                     <div class="card mb-4 box-shadow">
-                      <img class="card-img-top" src="${this.images.original_still.url}" alt="Card image cap">
+                      <img id="resultImg-${i}" class="card-img-top" src="${still}" alt="Card image cap">
                       <div class="card-body">
                         <p class="card-text">${this.title}</p>
                         <div class="d-flex justify-content-between align-items-center">
@@ -107,7 +108,11 @@ $(document).ready(function(){
                       </div>
                     </div>
                   </div>
-                    `)
+                    `);
+
+                    $('#resultBtn-'+i).on('click', function(){
+                        $('#resultImg-'+i).attr('src', animated);
+                    });
                 });
             });
         });
