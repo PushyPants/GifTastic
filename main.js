@@ -12,10 +12,7 @@ function getTrending() {
         
         $(tData).each(function(i){
             let title = this.title;
-            let shortTitle = title.split(' ').slice(0,3).join(' ');
             let trendSearch = title.split(' ').slice(0,3).join('_');
-            let relatedGifs;
-
             
             $('.carousel-inner').append(`
             <div id ="slide${i}" class="carousel-item">
@@ -26,9 +23,13 @@ function getTrending() {
             <p class="float-left imgRating">Rating: ${this.rating}</p>
             <p class="float-right imgLink"><a href="${this.bitly_url}" target="blank">Visit Page</a></p>
             </div>
-            
-            <div class="col-md-8">
-            <h4 class="relatedTitle text-right">Gifs related to: ${shortTitle}</h4>
+            <div class="col-md-7 offset-md-1 text-right">
+            <div class="relatedContainer">
+            <h4 class="relatedTitle text-right">Related Gifs:</h4>
+            <div class="row relatedRow${i}">
+            </div>
+            </div>
+            </div>
             </div>
             </div>
             </div>
@@ -41,10 +42,16 @@ function getTrending() {
             }).then(function(searchObject){
                 relatedGifs = searchObject.data;
 
-                $(relatedGifs).each(function(){
+                 $(relatedGifs).each(function(){
                     //append related column with gif results
-                    console.log(this.title);
-                })
+                    $('.relatedRow'+i).append(`
+                    <div id="relatedSlide${i}" class="col-md-4">
+                    <a href="${this.bitly_url}" target="blank">
+                    <img src="${this.images.original.url}" class="img-fluid w-100 relatedImg">
+                    </a>
+                    </div>
+                    `)
+                 })
 
             });
 
@@ -52,5 +59,4 @@ function getTrending() {
 
     })
 }
-
 getTrending();
