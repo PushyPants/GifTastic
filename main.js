@@ -89,7 +89,25 @@ $(document).ready(function(){
                 searchResults = searchObject.data;
                 
                 $(searchResults).each(function(i){
-                    console.log(searchResults[i].title)
+                    let still = this.images.original_still.url;
+                    let animated = this.images.original.url;
+                    console.log(this);
+                    $('#searchResults').append(`
+                    <div class="col-md-4">
+                    <div class="card mb-4 box-shadow">
+                      <img class="card-img-top" src="${this.images.original_still.url}" alt="Card image cap">
+                      <div class="card-body">
+                        <p class="card-text">${this.title}</p>
+                        <div class="d-flex justify-content-between align-items-center">
+                          <div class="btn-group">
+                            <button type="button" class="btn btn-sm btn-outline-secondary" src="${this.bitly_url}"><span class="glyphicon glyphicon-globe"></span></button>
+                          </div>
+                          <small class="text-muted">${this.rating}</small>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                    `)
                 });
             });
         });
