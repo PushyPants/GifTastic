@@ -89,8 +89,8 @@ $(document).ready(function(){
                 searchResults = searchObject.data;
                 
                 $(searchResults).each(function(i){
-                    let still = this.images.original_still.url;
-                    let animated = this.images.original.url;
+                    let still = searchResults[i].images.original_still.url;
+                    let animated = searchResults[i].images.original.url;
                     
                     
                     $('#searchResults').append(`
@@ -98,12 +98,12 @@ $(document).ready(function(){
                     <div class="card mb-4 box-shadow">
                       <img id="resultImg-${i}" class="card-img-top" src="${still}" alt="Card image cap">
                       <div class="card-body">
-                        <p class="card-text">${this.title}</p>
+                        <p class="card-text">${searchResults[i].title}</p>
                         <div class="d-flex justify-content-between align-items-center">
                           <div class="btn-group">
-                            <button type="button" class="btn btn-sm btn-outline-secondary" src="${this.bitly_url}"><span class="glyphicon glyphicon-globe"></span></button>
+                            <button type="button" class="btn btn-sm btn-outline-secondary" src="${searchResults[i].bitly_url}"><span class="glyphicon glyphicon-globe"></span></button>
                           </div>
-                          <small class="text-muted">${this.rating}</small>
+                          <small class="text-muted">${searchResults[i].rating}</small>
                         </div>
                       </div>
                     </div>
