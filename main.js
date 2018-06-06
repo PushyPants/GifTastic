@@ -16,7 +16,9 @@ $(document).ready(function(){
             
             $(tData).each(function(i,val){
                 let title = val.title;
-                let trendSearch = title.split(' ').slice(0,3).join('_');
+                let titleSearch = title.trim().split(' ').join('_');
+                let shortTitle = title.split('GIF')[0];
+                let shortSearch = shortTitle.trim().split(' ').join('_');
                 let setActive = $('.carousel-inner').find(`[data-id="cItem-0"]`);
                 
                 let carousel = $('.carousel-inner');
@@ -38,7 +40,7 @@ $(document).ready(function(){
                 });
                 let lgImg = $('<img>').attr({
                     class: 'd-block w-100',
-                    src: i.title,
+                    src: val.images.original.url,
                     'data-id': 'lgImg-'+i,
                 });
                 let pRating = $('<p>').attr({
@@ -71,24 +73,32 @@ $(document).ready(function(){
                     class: 'row relRow',
                     'data-id': 'relRow-'+i,
                 });
-
                 carousel.append(carouselItem);
-                carouselItem.append(carouselRow);
-                carouselRow.append(lgImgCol);
-                lgImgCol.append(lgImgTitle);
-                lgImgCol.append(lgImg);
-                lgImgCol.append(pRating);
-                lgImgCol.append(pLinkBtn);
-                pLinkBtn.append(pLink);
-                carouselRow.append(relCol);
-                relCol.append(relContainer);
-                relContainer.append(relTitle);
-                relContainer.append(relRow);
+                    carouselItem.append(carouselRow);
+                        carouselRow.append(lgImgCol);
+                            lgImgCol.append(lgImgTitle);
+                                if (shortTitle === '') {
+                                    lgImgTitle.text(title);
+                                } else {
+                                    lgImgTitle.text(shortTitle);
+                                }
+                            lgImgCol.append(lgImg);
+                            lgImgCol.append(pRating);
+                                pRating.text('Rated: '+val.rating);
+                            lgImgCol.append(pLinkBtn);
+                                pLinkBtn.append(pLink);
+                                    pLink.text('visit');
+                        carouselRow.append(relCol);
+                            relCol.append(relContainer);
+                                relContainer.append(relTitle);
+                                    relTitle.text('Related:');
+                                relContainer.append(relRow);
 
                 $(setActive).addClass('active');
                 
                 $.ajax({
-                    url: 'http://api.giphy.com/v1/gifs/search?api_key='+apiKey+'&limit=6&q='+trendSearch,
+                    //researched and found out about ternary operators... those are awesome!
+                    url: (shortTitle === '') ? 'http://api.giphy.com/v1/gifs/search?api_key='+apiKey+'&limit=6&q='+titleSearch : 'http://api.giphy.com/v1/gifs/search?api_key='+apiKey+'&limit=6&q='+shortSearch,
                     method: 'GET'
                 }).then(function(searchObject){
                     relatedGifs = searchObject.data;
