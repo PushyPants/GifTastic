@@ -262,6 +262,7 @@ $(document).ready(function(){
                 $('#searchResults').empty();
                 populateResults(searchObject);
             });
+            $('#searchBar')[0].reset();
         });
     };
 
@@ -283,7 +284,7 @@ $(document).ready(function(){
             tState = 'open';
             $('.jumboHeader h2').animate({'font-size':'2rem'},300);
             $('.jumbotron').animate({'padding-top':'15px','padding-bottom':'15px'},300);
-            $('.carousel').animate({'opacity': 1});
+            $('.carousel').animate({'opacity': 1},200);
             $('.jumbotron .container').animate({'height':'100%'},300);
         }
     };
