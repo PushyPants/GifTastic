@@ -5,6 +5,7 @@ $(document).ready(function(){
     let topics = ['cat','dog','puppy','monkey','bear','raccoon'];
     let buttonQuery;
     let searchResults;
+    let tState = 'open'
 
 
     function getTrending() {
@@ -228,6 +229,7 @@ $(document).ready(function(){
 
     function btnSearch() {
         $('.searchTerms').on('click','.btnSearch', function(){
+            hideTrending();
             $('#searchResults').empty();
             let searchTerm = $(this).val();
 
@@ -247,6 +249,7 @@ $(document).ready(function(){
     function formSubmit(){
         $('#searchBar').submit(function(event){
             event.preventDefault();
+            hideTrending();
             let searchTerm = $(searchInput).val();
 
             topics.push(searchTerm);
@@ -264,4 +267,32 @@ $(document).ready(function(){
 
     formSubmit();
 
+    function hideTrending(){        
+        if (tState === 'open') {
+            tState = 'close';
+            $('.jumboHeader h2').animate({'font-size':'20px'},300);
+            $('.jumbotron').animate({'padding-top':'10px','padding-bottom':'3px'},300);
+            $('.carousel').animate({'opacity': 0},300);
+            $('.jumbotron .container').animate({'height':'0'},300);
+        }
+       
+    };
+
+    function showTrending(){
+        if (tState === 'close') {
+            tState = 'open';
+            $('.jumboHeader h2').animate({'font-size':'2rem'},300);
+            $('.jumbotron').animate({'padding-top':'15px','padding-bottom':'15px'},300);
+            $('.carousel').animate({'opacity': 1});
+            $('.jumbotron .container').animate({'height':'100%'},300);
+        }
+    };
+
+    function toggleTrending(){
+        $('.jumboHeader').on('click',function(){
+            (tState === 'open') ? hideTrending() : showTrending();
+        })
+    }
+
+    toggleTrending();
 });
