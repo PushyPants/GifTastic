@@ -14,31 +14,76 @@ $(document).ready(function(){
         }).then(function(trendingObject){
             let tData = trendingObject.data;
             
-            $(tData).each(function(i){
-                let title = this.title;
+            $(tData).each(function(i,val){
+                let title = val.title;
                 let trendSearch = title.split(' ').slice(0,3).join('_');
+                let setActive = $('.carousel-inner').find(`[data-id="cItem-0"]`);
                 
-                $('.carousel-inner').append(`
-                <div id ="slide${i}" class="carousel-item">
-                <div class="row carouselRow">
-                <div class="col-md-4">
-                <h3 class="imgTitle">${this.title}</h3>
-                <img class="d-block w-100" src="${this.images.original.url}" alt="slide ${i+1}">
-                <p class="float-left imgRating">Rating: ${this.rating}</p>
-                <p class="float-right imgLink"><a href="${this.bitly_url}" target="blank">Visit Page</a></p>
-                </div>
-                <div class="col-md-7 offset-md-1 text-right">
-                <div class="relatedContainer">
-                <h4 class="relatedTitle text-right">Related Gifs:</h4>
-                <div class="row relatedRow${i}">
-                </div>
-                </div>
-                </div>
-                </div>
-                </div>
-                </div>
-                `);
-                $('#slide0').addClass('active');
+                let carousel = $('.carousel-inner');
+                let carouselItem = $('<div>').attr({
+                    class: 'carousel-item',
+                    'data-id': 'cItem-'+i,
+                });
+                let carouselRow = $('<div>').attr({
+                    class: 'row carousel-row',
+                    'data-id': 'cRow-'+i,
+                });
+                let lgImgCol = $('<div>').attr({
+                    class: 'col-md-4',
+                    'data-id': 'lgImgCol-'+i,
+                });
+                let lgImgTitle = $('<h3>').attr({
+                    class: 'imgTitle',
+                    'data-id': 'lgImgTitle-'+i,
+                });
+                let lgImg = $('<img>').attr({
+                    class: 'd-block w-100',
+                    src: i.title,
+                    'data-id': 'lgImg-'+i,
+                });
+                let pRating = $('<p>').attr({
+                    class: 'float-left imgRating',
+                    'data-id': 'pRating-'+i
+                });
+                let pLinkBtn = $('<p>').attr({
+                    class: 'float-right imgLink',
+                    'data-id': 'pLinkBtn-'+1,
+                });
+                let pLink = $('<a>').attr({
+                    href: val.bitly_url,
+                    target: 'blank',
+                    'data-id': 'pLink-'+1,
+                });
+                let relCol = $('<div>').attr({
+                    class: 'col-md-7 offset-md-1 text-right',
+                    'data-id': 'relCol-'+i,
+                });
+                let relContainer = $('<div>').attr({
+                    class: 'relContainer',
+                    'data-id': 'relContainer-'+i,
+                });
+                let relTitle = $('<h4>').attr({
+                    class: 'relTitle text-right',
+                    'data-id': 'relTitle-'+i,
+                });
+                let relRow = $('<div>').attr({
+                    class: 'row relRow-'+i,
+                });
+
+                carousel.append(carouselItem);
+                carouselItem.append(carouselRow);
+                carouselRow.append(lgImgCol);
+                lgImgCol.append(lgImgTitle);
+                lgImgCol.append(lgImg);
+                lgImgCol.append(pRating);
+                lgImgCol.append(pLinkBtn);
+                pLinkBtn.append(pLink);
+                carouselRow.append(relCol);
+                relCol.append(relContainer);
+                relContainer.append(relTitle);
+                relContainer.append(relRow);
+
+                //$(setActive).addClass('active');
                 
                 $.ajax({
                     url: 'http://api.giphy.com/v1/gifs/search?api_key='+apiKey+'&limit=6&q='+trendSearch,
