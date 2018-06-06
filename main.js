@@ -77,11 +77,7 @@ $(document).ready(function(){
                     carouselItem.append(carouselRow);
                         carouselRow.append(lgImgCol);
                             lgImgCol.append(lgImgTitle);
-                                if (shortTitle === '') {
-                                    lgImgTitle.text(title);
-                                } else {
-                                    lgImgTitle.text(shortTitle);
-                                }
+                                (shortTitle === '') ? lgImgTitle.text(title) : lgImgTitle.text(shortTitle);
                             lgImgCol.append(lgImg);
                             lgImgCol.append(pRating);
                                 pRating.text('Rated: '+val.rating);
@@ -149,6 +145,7 @@ $(document).ready(function(){
 
     function btnSearch() {
         $('.searchTerms').on('click','.btnSearch', function(){
+            $('#searchResults').empty();
             let searchTerm = $(this).val();
 
             $.ajax({
@@ -156,38 +153,93 @@ $(document).ready(function(){
                 method: 'GET',
             }).then(function(searchObject){
                 searchResults = searchObject.data;
+                gifAnimated = false;
                 
-                $(searchResults).each(function(i){
-                    let still = searchResults[i].images.original_still.url;
-                    let animated = searchResults[i].images.original.url;
-                    
-                    
-                    $('#searchResults').append(`
-                    <div id="resultBtn-${i}" class="col-md-4 resultItem">
-                    <div class="card mb-4 box-shadow">
-                      <img id="resultImg-${i}" class="card-img-top" src="${still}" alt="Card image cap">
-                      <div class="card-body">
-                        <p class="card-text">${searchResults[i].title}</p>
-                        <div class="d-flex justify-content-between align-items-center">
-                          <div class="btn-group">
-                            <button type="button" class="btn btn-sm btn-outline-secondary" src="${searchResults[i].bitly_url}"><span class="glyphicon glyphicon-globe"></span></button>
-                          </div>
-                          <small class="text-muted">${searchResults[i].rating}</small>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                    `);
-
-                    $('#resultBtn-'+i).on('click', function(){
-                        $('#resultImg-'+i).attr('src', animated);
+                $(searchResults).each(function(i, val){                    
+                    let searchResults = $('#searchResults');
+                    let resItem = $('<div>').attr({
+                        class: 'col-md-4 resItem',
+                        'data-id': 'resItem-'+i,
                     });
+                    let resCard = $('<div>').attr({
+                        class: 'card mb-4 box-shadow',
+                        'data-id': 'resCard-'+i,
+                    });
+                    let resImg = $('<img>').attr({
+                        class: `card-img-top resImg${i}`,
+                        src: val.images.original_still.url,
+                        'data-still' : val.images.original_still.url,
+                        'data-animated' : val.images.original.url,
+                        'data-id': 'resImg-'+i,
+                    });
+                    let resCardBody = $('<div>').attr({
+                        class: 'card-body',
+                        'data-id': 'resCardBody-'+i,
+                    });
+                    let resCardTitle = $('<p>').attr({
+                        class: 'card-text',
+                        'data-id': 'resCardTitle-'+i,
+                    });
+                    let resBtnContainer = $('<div>').attr({
+                        class: 'd-flex justify-content-between align-items-center',
+                        'data-id': 'resBtnContainer-'+i ,
+                    });
+                    let resBtnGrp = $('<div>').attr({
+                        class: 'btn-group',
+                        'data-id': 'resBtnGrp-'+i,
+                    });
+                    let resBtn = $('<button>').attr({
+                        type: 'button',
+                        class: 'btn btn-sm btn-outline-secondary',
+                        'data-id': 'resBtn-'+i,
+                        src: val.bitly_url,
+                    });
+                    let glyphGlobe = $('<span>').attr({
+                        class: 'glyphicon glyphicon-globe',
+                    });
+                    
+                    let resRating = $('<small>').attr({
+                        class: 'text-muted',
+                        'data-id': 'resRating-'+i,
+                    });
+                    
+                    searchResults.append(resItem);
+                        resItem.append(resCard);
+                            resCard.append(resImg);
+                            resCard.append(resCardBody);
+                                resCardBody.append(resCardTitle);
+                                    resCardTitle.text(val.title)
+                                resCardBody.append(resBtnContainer);
+                                    resBtnContainer.append(resBtnGrp);
+                                        resBtnGrp.append(resBtn);
+                                        resBtn.append(glyphGlobe);
+                                    resBtnContainer.append(resRating);
+                                        resRating.text('Rated: '+val.rating);
+                                        
+                    
+                        $('.resImg'+i).on('click', function(){
+                            console.log($(this))
+                            
+                            if (gifAnimated === false) {
+                                gifAnimated = true;
+                                $(this).attr('src', $(this).data().animated);
+                            } else if (gifAnimated === true) {
+                                gifAnimated = false;
+                                $(this).attr('src', $(this).data().still);
+                                
+                            }
+                        });
+                    
                 });
             });
+           
         });
     }
 
+    
     btnSearch();
+    
+  
 
             
     //when user clicks on the giphy image the gif starts to play
