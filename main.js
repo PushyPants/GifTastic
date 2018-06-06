@@ -83,7 +83,7 @@ $(document).ready(function(){
                                 pRating.text('Rated: '+val.rating);
                             lgImgCol.append(pLinkBtn);
                                 pLinkBtn.append(pLink);
-                                    pLink.text('visit');
+                                    pLink.attr('visit');
                         carouselRow.append(relCol);
                             relCol.append(relContainer);
                                 relContainer.append(relTitle);
@@ -131,6 +131,7 @@ $(document).ready(function(){
     getTrending();
 
     function createButtons() {
+        $('.searchTerms').empty();
         //add "button check" if button exists hightlight 
             //else complete below
         $(topics).each(function(index,value){
@@ -143,6 +144,88 @@ $(document).ready(function(){
 
     createButtons();
 
+    function populateResults(obj){
+        searchResults = obj.data;
+        gifAnimated = false;
+        
+        $(searchResults).each(function(i, val){                    
+            let searchResults = $('#searchResults');
+            let resItem = $('<div>').attr({
+                class: 'col-md-4 resItem',
+                'data-id': 'resItem-'+i,
+            });
+            let resCard = $('<div>').attr({
+                class: 'card mb-4 box-shadow',
+                'data-id': 'resCard-'+i,
+            });
+            let resImg = $('<img>').attr({
+                class: `card-img-top resImg${i}`,
+                src: val.images.original_still.url,
+                'data-still' : val.images.original_still.url,
+                'data-animated' : val.images.original.url,
+                'data-id': 'resImg-'+i,
+            });
+            let resCardBody = $('<div>').attr({
+                class: 'card-body',
+                'data-id': 'resCardBody-'+i,
+            });
+            let resCardTitle = $('<p>').attr({
+                class: 'card-text',
+                'data-id': 'resCardTitle-'+i,
+            });
+            let resBtnContainer = $('<div>').attr({
+                class: 'd-flex justify-content-between align-items-center',
+                'data-id': 'resBtnContainer-'+i ,
+            });
+            let resBtnGrp = $('<div>').attr({
+                class: 'btn-group',
+                'data-id': 'resBtnGrp-'+i,
+            });
+            let resBtn = $('<button>').attr({
+                type: 'button',
+                class: 'btn btn-sm btn-outline-secondary',
+                'data-id': 'resBtn-'+i,
+                src: val.bitly_url,
+            });
+            let glyphGlobe = $('<span>').attr({
+                class: 'fas fa-link fa-sm',
+            });
+            
+            let resRating = $('<small>').attr({
+                class: 'text-muted',
+                'data-id': 'resRating-'+i,
+            });
+            
+            searchResults.append(resItem);
+                resItem.append(resCard);
+                    resCard.append(resImg);
+                    resCard.append(resCardBody);
+                        resCardBody.append(resCardTitle);
+                            resCardTitle.text(val.title)
+                        resCardBody.append(resBtnContainer);
+                            resBtnContainer.append(resBtnGrp);
+                                resBtnGrp.append(resBtn);
+                                resBtn.append(glyphGlobe);
+                            resBtnContainer.append(resRating);
+                                resRating.text('Rated: '+val.rating);
+                                
+            
+                $('.resImg'+i).on('click', function(){
+                    console.log($(this))
+                    
+                    if (gifAnimated === false) {
+                        gifAnimated = true;
+                        $(this).attr('src', $(this).data().animated);
+                    } else if (gifAnimated === true) {
+                        gifAnimated = false;
+                        $(this).attr('src', $(this).data().still);
+                        
+                    }
+                });
+            
+        });
+    };
+
     function btnSearch() {
         $('.searchTerms').on('click','.btnSearch', function(){
             $('#searchResults').empty();
@@ -152,85 +235,7 @@ $(document).ready(function(){
                 url: 'http://api.giphy.com/v1/gifs/search?api_key='+apiKey+'&limit=10&q='+searchTerm,
                 method: 'GET',
             }).then(function(searchObject){
-                searchResults = searchObject.data;
-                gifAnimated = false;
-                
-                $(searchResults).each(function(i, val){                    
-                    let searchResults = $('#searchResults');
-                    let resItem = $('<div>').attr({
-                        class: 'col-md-4 resItem',
-                        'data-id': 'resItem-'+i,
-                    });
-                    let resCard = $('<div>').attr({
-                        class: 'card mb-4 box-shadow',
-                        'data-id': 'resCard-'+i,
-                    });
-                    let resImg = $('<img>').attr({
-                        class: `card-img-top resImg${i}`,
-                        src: val.images.original_still.url,
-                        'data-still' : val.images.original_still.url,
-                        'data-animated' : val.images.original.url,
-                        'data-id': 'resImg-'+i,
-                    });
-                    let resCardBody = $('<div>').attr({
-                        class: 'card-body',
-                        'data-id': 'resCardBody-'+i,
-                    });
-                    let resCardTitle = $('<p>').attr({
-                        class: 'card-text',
-                        'data-id': 'resCardTitle-'+i,
-                    });
-                    let resBtnContainer = $('<div>').attr({
-                        class: 'd-flex justify-content-between align-items-center',
-                        'data-id': 'resBtnContainer-'+i ,
-                    });
-                    let resBtnGrp = $('<div>').attr({
-                        class: 'btn-group',
-                        'data-id': 'resBtnGrp-'+i,
-                    });
-                    let resBtn = $('<button>').attr({
-                        type: 'button',
-                        class: 'btn btn-sm btn-outline-secondary',
-                        'data-id': 'resBtn-'+i,
-                        src: val.bitly_url,
-                    });
-                    let glyphGlobe = $('<span>').attr({
-                        class: 'glyphicon glyphicon-globe',
-                    });
-                    
-                    let resRating = $('<small>').attr({
-                        class: 'text-muted',
-                        'data-id': 'resRating-'+i,
-                    });
-                    
-                    searchResults.append(resItem);
-                        resItem.append(resCard);
-                            resCard.append(resImg);
-                            resCard.append(resCardBody);
-                                resCardBody.append(resCardTitle);
-                                    resCardTitle.text(val.title)
-                                resCardBody.append(resBtnContainer);
-                                    resBtnContainer.append(resBtnGrp);
-                                        resBtnGrp.append(resBtn);
-                                        resBtn.append(glyphGlobe);
-                                    resBtnContainer.append(resRating);
-                                        resRating.text('Rated: '+val.rating);
-                                        
-                    
-                        $('.resImg'+i).on('click', function(){
-                            console.log($(this))
-                            
-                            if (gifAnimated === false) {
-                                gifAnimated = true;
-                                $(this).attr('src', $(this).data().animated);
-                            } else if (gifAnimated === true) {
-                                gifAnimated = false;
-                                $(this).attr('src', $(this).data().still);
-                                
-                            }
-                        });
-                    
-                });
+                populateResults(searchObject);
             });
            
         });
@@ -239,20 +244,24 @@ $(document).ready(function(){
     
     btnSearch();
     
-  
-
-            
-    //when user clicks on the giphy image the gif starts to play
-        //clicks again and the gif stops playing
     function formSubmit(){
         $('#searchBar').submit(function(event){
             event.preventDefault();
-            console.log($(searchInput).val());
+            let searchTerm = $(searchInput).val();
+
+            topics.push(searchTerm);
+            createButtons();
+
+            $.ajax({
+                url: 'http://api.giphy.com/v1/gifs/search?api_key='+apiKey+'&limit=10&q='+searchTerm,
+                method: 'GET',
+            }).then(function(searchObject){
+                $('#searchResults').empty();
+                populateResults(searchObject);
+            });
         });
     };
 
     formSubmit();
-
-    //search form takes a value from the input and returns the same result as the button. 
 
 });
