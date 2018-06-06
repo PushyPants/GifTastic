@@ -67,7 +67,9 @@ $(document).ready(function(){
                     'data-id': 'relTitle-'+i,
                 });
                 let relRow = $('<div>').attr({
-                    class: 'row relRow-'+i,
+                    id: 'relRow-'+i,
+                    class: 'row relRow',
+                    'data-id': 'relRow-'+i,
                 });
 
                 carousel.append(carouselItem);
@@ -83,23 +85,35 @@ $(document).ready(function(){
                 relContainer.append(relTitle);
                 relContainer.append(relRow);
 
-                //$(setActive).addClass('active');
+                $(setActive).addClass('active');
                 
                 $.ajax({
                     url: 'http://api.giphy.com/v1/gifs/search?api_key='+apiKey+'&limit=6&q='+trendSearch,
                     method: 'GET'
                 }).then(function(searchObject){
                     relatedGifs = searchObject.data;
-
-                    $(relatedGifs).each(function(){
+                    
+                    $(relatedGifs).each(function(j,val){
                         //append related column with gif results
-                        $('.relatedRow'+i).append(`
-                        <div id="relatedSlide${i}" class="col-md-4">
-                        <a href="${this.bitly_url}" target="blank">
-                        <img src="${this.images.original.url}" class="img-fluid w-100 relatedImg">
-                        </a>
-                        </div>
-                        `)
+                        let currentRelRow = $('#relRow-'+i);
+                        let relSlide = $('<div>').attr({
+                            class: 'col-md-4',
+                            'data-id': 'relSlide-'+j,
+                        });
+                        let relImgLink = $('<a>').attr({
+                            href: val.bitly_url,
+                            target: 'blank',
+                            'data-id': ''+j,
+                        });
+                        let relImg = $('<img>').attr({
+                            src: val.images.original.url,
+                            class: 'img-fluid w-100 relImg',
+                            'data-id': 'relImg'+j,
+                        });
+                                       
+                        currentRelRow.append(relSlide);
+                        relSlide.append(relImgLink);
+                        relImgLink.append(relImg);
                     })
 
                 });
