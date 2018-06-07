@@ -2,11 +2,27 @@ $(document).ready(function(){
 
     let apiKey = 'zVIVp4ETXeNFTJGDlxDKhaodyQgovHBA';
     let trendRelated;
-    let topics = ['cat','dog','puppy','monkey','bear','raccoon'];
+    let topics = ['cat','dog','puppy','monkey','bear','raccoon','meercat'];
     let buttonQuery;
     let searchResults;
     let tState = 'open'
+    
+    // let sessionTopics = topics.join(",");
+    // console.log("This is what I put in session storage: ",sessionTopics);
+    // sessionStorage.setItem("topics", sessionTopics);
+    // let loadedTopics = sessionStorage.getItem("topics").split(",");
+    // console.log("This is what I get out of session storage: ",loadedTopics)
 
+    // let searchQuery = "My Super Awesome String, This is another string, Here is another one";
+    // let newStringArrayToBeConverted = searchQuery.split(",");
+    // console.log("This is my array of strings to be converted: " , newStringArrayToBeConverted);
+    // newStringArrayToBeConverted.forEach((element, i)=>{
+    //     let myConvertedQuery = element.split(" ").join("+");
+    //     console.log("This is my converted search: ",myConvertedQuery);
+    // })
+    // console.log("This is my uncoverted search: " , searchQuery);
+    // let myConvertedQuery = searchQuery.split(" ").join("+");
+    // console.log("This is my converted search: ",myConvertedQuery);
 
     function getTrending() {
         $.ajax({
