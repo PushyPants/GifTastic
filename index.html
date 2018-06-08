@@ -13,8 +13,8 @@
     <script src="https://code.jquery.com/jquery-3.3.1.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
-    <script src="main.js"></script>
-    <link href="style.css" rel="stylesheet">
+    <script src="js/main.js"></script>
+    <link href="css/style.css" rel="stylesheet">
   </head>
 
   <body>
@@ -31,14 +31,14 @@
               </div>
             </div>
             <div class="col-sm-4 offset-md-1 py-4">
-              <h4 class="text-white">Popular Searches:</h4>
-              <ul id="popSearch" class="list-unstyled">
+              <!-- <h4 class="text-white">Popular Searches:</h4>
+              <ul id="popSearch" class="list-unstyled"> -->
               </ul>
             </div>
           </div>
         </div>
       </div>
-      <div class="navbar navbar-dark bg-dark box-shadow">
+      <div class="navbar navbar-dark bg-dark box-shadow sticky-top">
         <div class="container d-flex justify-content-between">
           <a href="#" class="navbar-brand d-flex align-items-center">
             <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="mr-2"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"></path><circle cx="12" cy="13" r="4"></circle></svg>
@@ -49,7 +49,7 @@
             <!-- <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button> -->
           </form>
           <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarHeader" aria-controls="navbarHeader" aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
+            <span class="fas fa-angle-up fa-lg"></span>
           </button>
         </div>
       </div>
@@ -68,10 +68,15 @@
       </section>
 
       <div class="album py-5 bg-light">
-        <div class="container">
+        <div id="resultContainer" class="container">
+          <!-- <button class="btn btn-light play-pause" alt="Play/Pause All">
+            <span class="fas fa-play"></span> -->
+          </button>
 
           <div id="searchResults" class="row">
+            <div id="cardCol" class="card-column">
            <!-- search results populate here -->
+           </div>
           </div>
         </div>
       </div>

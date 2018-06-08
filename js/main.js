@@ -6,6 +6,7 @@ $(document).ready(function(){
     let buttonQuery;
     let searchResults;
     let tState = 'open'
+    let cardAnimation = 'paused'
     
     // let sessionTopics = topics.join(",");
     // console.log("This is what I put in session storage: ",sessionTopics);
@@ -163,7 +164,13 @@ $(document).ready(function(){
 
     function populateResults(obj){
         searchResults = obj.data;
-        gifAnimated = false;
+        let pButton = $('<button>').attr('class','btn btn-light play-pause');
+        let pSpan = $('<span>').attr('class','fas fas-play');
+        $('#resultContainer').append(pButton);
+        pButton.append(pSpan);
+        toggleAnimation();
+
+        $('.play-pause span').attr('class', 'fas fa-play')
         
         $(searchResults).each(function(i, val){                    
             let searchResults = $('#searchResults');
@@ -176,7 +183,7 @@ $(document).ready(function(){
                 'data-id': 'resCard-'+i,
             });
             let resImg = $('<img>').attr({
-                class: `card-img-top resImg${i}`,
+                class: `paused card-img-top resImg${i}`,
                 src: val.images.original_still.url,
                 'data-still' : val.images.original_still.url,
                 'data-animated' : val.images.original.url,
@@ -198,11 +205,14 @@ $(document).ready(function(){
                 class: 'btn-group',
                 'data-id': 'resBtnGrp-'+i,
             });
+            let btnA = $('<a>').attr({
+                href: val.bitly_url,
+                target: '_blank',
+            })
             let resBtn = $('<button>').attr({
                 type: 'button',
                 class: 'btn btn-sm btn-outline-secondary',
                 'data-id': 'resBtn-'+i,
-                src: val.bitly_url,
             });
             let glyphGlobe = $('<span>').attr({
                 class: 'fas fa-link fa-sm',
@@ -221,7 +231,8 @@ $(document).ready(function(){
                             resCardTitle.text(val.title)
                         resCardBody.append(resBtnContainer);
                             resBtnContainer.append(resBtnGrp);
-                                resBtnGrp.append(resBtn);
+                                resBtnGrp.append(btnA);
+                                btnA.append(resBtn);
                                 resBtn.append(glyphGlobe);
                             resBtnContainer.append(resRating);
                                 resRating.text('Rated: '+val.rating);
@@ -230,13 +241,12 @@ $(document).ready(function(){
                 $('.resImg'+i).on('click', function(){
                     console.log($(this))
                     
-                    if (gifAnimated === false) {
-                        gifAnimated = true;
+                    if ($(this).attr('class').includes('paused')) {
+                        $(this).removeClass('paused').addClass('animated');
                         $(this).attr('src', $(this).data().animated);
-                    } else if (gifAnimated === true) {
-                        gifAnimated = false;
-                        $(this).attr('src', $(this).data().still);
-                        
+                    } else if ($(this).attr('class').includes('animated')) {
+                        $(this).removeClass('animated').addClass('paused');
+                        $(this).attr('src', $(this).data().still);                        
                     }
                 });
             
@@ -268,18 +278,39 @@ $(document).ready(function(){
             hideTrending();
             let searchTerm = $(searchInput).val();
 
-            topics.push(searchTerm);
-            createButtons();
+            function formSearch(){
+                $.ajax({
+                    url: 'http://api.giphy.com/v1/gifs/search?api_key='+apiKey+'&limit=10&q='+searchTerm,
+                    method: 'GET',
+                }).then(function(searchObject){
+                    $('#searchResults').empty();
+                    populateResults(searchObject);
+                });
+                $('#searchBar')[0].reset();
+            };
+            if (searchTerm === 'collin' || searchTerm === 'Collin') {
+                searchTerm = 'glittery'
+                formSearch();
 
-            $.ajax({
-                url: 'http://api.giphy.com/v1/gifs/search?api_key='+apiKey+'&limit=10&q='+searchTerm,
-                method: 'GET',
-            }).then(function(searchObject){
-                $('#searchResults').empty();
-                populateResults(searchObject);
-            });
-            $('#searchBar')[0].reset();
-        });
+                let audio = new Audio('audio/stream.mp3');
+                console.log(audio)
+                audio.play();
+
+                setTimeout(function(){
+                $('.play-pause').trigger('click');
+                console.log('trigger function should have fired')
+                },3000);
+
+            } else {
+                if (topics.includes(searchTerm)) {
+                    formSearch();
+                } else {
+                    topics.push(searchTerm);
+                    formSearch();
+                    createButtons();
+                }
+            };
+        });``
     };
 
     formSubmit();
@@ -311,5 +342,43 @@ $(document).ready(function(){
         })
     }
 
+    function toggleNavBtn(){
+        $('.navbar-toggler').on('click', function(){
+            if ($('#navbarHeader').attr('class').includes('show')) {
+                $('.navbar-toggler span').attr('class','fas fa-angle-down fa-lg');
+            } else {
+                $('.navbar-toggler span').attr('class','fas fa-angle-up fa-lg');
+
+            };
+        });
+    };
+
+    toggleNavBtn();
+
     toggleTrending();
+
+    function toggleAnimation() {
+        $('.play-pause').on('click', function(){
+            if (cardAnimation === 'paused') {
+                $('.card img.paused').each(function(i,val) {
+                    $('.play-pause span').attr('class', 'fas fa-pause')
+                    $('.card img.paused').addClass('animated').removeClass('paused')
+                    let srcString = this.src.split('_s.').join('.');
+                    $(this).attr('src',srcString);
+                    cardAnimation = 'animated';
+                });
+            } else {
+                $('.card img.animated').each(function(i,val) {
+                    $('.play-pause span').attr('class', 'fas fa-play')
+                    $('.card img.animated').addClass('paused').removeClass('animated')
+                    let srcString = this.src.split('.gif').join('_s.gif');
+                    $(this).attr('src',srcString);
+                    cardAnimation = 'paused';
+                });
+        }
+        })
+    };
+    
 });
+
+
