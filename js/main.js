@@ -2,12 +2,18 @@ $(document).ready(function(){
 
     let apiKey = 'zVIVp4ETXeNFTJGDlxDKhaodyQgovHBA';
     let trendRelated;
-    let topics = ['cat','dog','puppy','monkey','bear','raccoon','meercat'];
     let buttonQuery;
     let searchResults;
     let tState = 'open'
     let cardAnimation = 'paused'
-    
+    let topics;
+    console.log(sessionStorage.getItem('topics'))
+    if (sessionStorage.getItem('topics') !== null) {
+        topics = sessionStorage.getItem('topics').split(',');
+    } else {
+        topics = ['cat','dog','puppy','monkey','bear','raccoon','meercat'];
+    }
+    console.log(topics)
     // let sessionTopics = topics.join(",");
     // console.log("This is what I put in session storage: ",sessionTopics);
     // sessionStorage.setItem("topics", sessionTopics);
@@ -296,6 +302,8 @@ $(document).ready(function(){
                 console.log(audio)
                 audio.play();
 
+                toggleAnimation();
+
                 setTimeout(function(){
                 $('.play-pause').trigger('click');
                 console.log('trigger function should have fired')
@@ -306,6 +314,8 @@ $(document).ready(function(){
                     formSearch();
                 } else {
                     topics.push(searchTerm);
+                    sessionStorage.setItem('topics',topics);
+                    topics = sessionStorage.getItem('topics').split(',');
                     formSearch();
                     createButtons();
                 }
@@ -375,7 +385,7 @@ $(document).ready(function(){
                     $(this).attr('src',srcString);
                     cardAnimation = 'paused';
                 });
-        }
+            }
         })
     };
     
